@@ -14,34 +14,52 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   LevelIndex: 1
   ActiveCells:
-  - {x: -1.26, y: 0, z: 0.38}
-  - {x: 4.27, y: 0, z: 0.38000047}
-  - {x: 0.13999999, y: 0, z: -1.0199996}
-  - {x: 0.13999999, y: 0, z: 0.38000023}
-  - {x: 0.13999999, y: 0, z: 1.7800003}
-  - {x: 1.54, y: 0, z: -1.0199996}
-  - {x: 1.54, y: 0, z: 0.38000023}
-  - {x: 1.54, y: 0, z: 1.7800003}
-  - {x: 2.9399998, y: 0, z: -1.0199996}
-  - {x: 2.9399998, y: 0, z: 0.38000023}
-  - {x: 2.9399998, y: 0, z: 1.7800003}
+  - {x: -1.43, y: 0, z: 2.1599998}
+  - {x: 4.18, y: 0, z: 2.1600003}
+  - {x: -0.03000009, y: 0, z: 0.7600002}
+  - {x: -0.03000009, y: 0, z: 2.16}
+  - {x: -0.03000009, y: 0, z: 3.56}
+  - {x: 1.3699999, y: 0, z: 0.7600002}
+  - {x: 1.3699999, y: 0, z: 2.16}
+  - {x: 1.3699999, y: 0, z: 3.56}
+  - {x: 2.7699997, y: 0, z: 0.7600002}
+  - {x: 2.7699997, y: 0, z: 2.16}
+  - {x: 2.7699997, y: 0, z: 3.56}
   Goals:
   - Color: 1
     Count: 2
+  PrePlacedClusters:
+  - GridWorldPos: {x: -1.43, y: 0, z: 2.16}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
+    - LocalSlot: {x: 1, y: 0}
+      Color: 2
+  - GridWorldPos: {x: 1.37, y: 0, z: 0.7600002}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 3
+  - GridWorldPos: {x: 2.77, y: 0, z: 2.16}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
   DockSlotCount: 1
   GenMode: 0
   PredefinedClusters:
   - Blocks:
     - LocalSlot: {x: 0, y: 0}
-      Color: 2
-    - LocalSlot: {x: 0, y: 1}
       Color: 3
-    - LocalSlot: {x: 1, y: 0}
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
       Color: 1
-    - LocalSlot: {x: 1, y: 1}
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 2
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 2
+    - LocalSlot: {x: 1, y: 0}
       Color: 4
   - Blocks:
     - LocalSlot: {x: 0, y: 0}
       Color: 1
-    - LocalSlot: {x: 0, y: 1}
-      Color: 3

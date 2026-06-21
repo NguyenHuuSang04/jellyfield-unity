@@ -14,16 +14,96 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelData
   LevelIndex: 2
   ActiveCells:
-  - {x: 1, y: 1}
-  - {x: 1, y: 2}
-  - {x: 1, y: 0}
-  - {x: 0, y: 1}
-  - {x: 2, y: 1}
+  - {x: -0.75, y: 0, z: -0.94000006}
+  - {x: -0.75, y: 0, z: 0.45999992}
+  - {x: -0.75, y: 0, z: 1.8599998}
+  - {x: -0.75, y: 0, z: 3.2599998}
+  - {x: 0.65, y: 0, z: -0.94000006}
+  - {x: 0.65, y: 0, z: 0.45999992}
+  - {x: 0.65, y: 0, z: 1.8599998}
+  - {x: 0.65, y: 0, z: 3.2599998}
+  - {x: 2.05, y: 0, z: -0.94000006}
+  - {x: 2.05, y: 0, z: 0.45999992}
+  - {x: 2.05, y: 0, z: 1.8599998}
+  - {x: 2.05, y: 0, z: 3.2599998}
+  - {x: 3.4499998, y: 0, z: -0.94000006}
+  - {x: 3.4499998, y: 0, z: 0.45999992}
+  - {x: 3.4499998, y: 0, z: 1.8599998}
+  - {x: 3.4499998, y: 0, z: 3.2599998}
   Goals:
   - Color: 2
-    Count: 4
+    Count: 3
   - Color: 4
-    Count: 4
+    Count: 3
+  PrePlacedClusters:
+  - GridWorldPos: {x: 0.65, y: 0, z: -0.9400001}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 2
+  - GridWorldPos: {x: -0.75, y: 0, z: 1.86}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
+  - GridWorldPos: {x: 3.45, y: 0, z: 0.4599999}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 3
+    - LocalSlot: {x: 0, y: 1}
+      Color: 4
+  - GridWorldPos: {x: 2.05, y: 0, z: 3.26}
+    Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 4
+    - LocalSlot: {x: 1, y: 0}
+      Color: 1
+    - LocalSlot: {x: 1, y: 1}
+      Color: 2
   DockSlotCount: 2
   GenMode: 0
-  PredefinedClusters: []
+  PredefinedClusters:
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
+    - LocalSlot: {x: 1, y: 0}
+      Color: 4
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
+    - LocalSlot: {x: 1, y: 1}
+      Color: 3
+  - Blocks:
+    - LocalSlot: {x: 1, y: 0}
+      Color: 1
+    - LocalSlot: {x: 0, y: 1}
+      Color: 3
+    - LocalSlot: {x: 1, y: 1}
+      Color: 4
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 2
+    - LocalSlot: {x: 1, y: 0}
+      Color: 4
+    - LocalSlot: {x: 0, y: 1}
+      Color: 1
+    - LocalSlot: {x: 1, y: 1}
+      Color: 3
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 1
+    - LocalSlot: {x: 1, y: 0}
+      Color: 4
+    - LocalSlot: {x: 0, y: 1}
+      Color: 2
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 2
+    - LocalSlot: {x: 1, y: 0}
+      Color: 4
+  - Blocks:
+    - LocalSlot: {x: 0, y: 0}
+      Color: 2
+    - LocalSlot: {x: 1, y: 0}
+      Color: 3

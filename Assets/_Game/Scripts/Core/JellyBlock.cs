@@ -5,14 +5,21 @@ public class JellyBlock
 {
     public int Id;
     public BlockColor Color;
-    
-    // Đảm bảo có dòng public HashSet này và viết đúng chính xác từng chữ:
     public HashSet<Vector2Int> LocalSlots = new HashSet<Vector2Int>();
+
+    // ===================================================================
+    // BIẾN THIẾU CHÍNH LÀ ĐÂY: 
+    // Khai báo danh sách lưu trữ các khối Cube hiển thị 3D ngoài màn hình
+    // ===================================================================
+    public List<GameObject> VisualObjs = new List<GameObject>();
 
     public JellyBlock(int id, BlockColor color, IEnumerable<Vector2Int> slots)
     {
         this.Id = id;
         this.Color = color;
         this.LocalSlots = new HashSet<Vector2Int>(slots);
+        
+        // Khởi tạo danh sách rỗng khi tạo khối mới
+        this.VisualObjs = new List<GameObject>();
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2614265749296842754}
   - component: {fileID: 1903743898720838000}
   - component: {fileID: 6899861984198417910}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: JellyBlock_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -38,19 +38,23 @@ public static class MergeResolver
             {
                 // Thuật toán gộp: Gom toàn bộ các Sub-slot đơn lẻ của cùng một màu lại với nhau
                 HashSet<Vector2Int> combinedSlots = new HashSet<Vector2Int>();
+                List<GameObject> combinedVisuals = new List<GameObject>(); // Lưu visual gom được
                 int minId = int.MaxValue;
 
                 foreach (var b in blocksOfColor)
                 {
                     combinedSlots.UnionWith(b.LocalSlots);
-                    if (b.Id < minId) minId = b.Id; // Giữ lại ID nhỏ nhất để đồng bộ View hiển thị
+                    if (b.VisualObjs != null) combinedVisuals.AddRange(b.VisualObjs); // Gom hình ảnh
+                    if (b.Id < minId) minId = b.Id;
                 }
 
-                // Kiểm tra xem các ô con gộp lại có liền kề nhau hợp lệ không (Không bị tách rời)
+                // Kiểm tra xem các ô con gộp lại có liền kề nhau hợp lệ không
                 if (ValidateAdjacency(combinedSlots))
                 {
                     // Tạo một khối thạch mới to hơn đã được hợp nhất diện tích
                     JellyBlock mergedBlock = new JellyBlock(minId, color, combinedSlots);
+                    mergedBlock.VisualObjs = combinedVisuals; // Kế thừa trọn vẹn danh sách hình ảnh!
+
                     newBlocksList.Add(mergedBlock);
                     anyMergeHappened = true;
                 }

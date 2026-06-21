@@ -4,58 +4,76 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
 
-    [Header("Audio Source")]
-    public AudioSource efxSource; // Gắn Component AudioSource dùng để phát tiếng động ngắn
+    [Header("🔊 Audio Sources (Tự động gán)")]
+    public AudioSource bgmSource;
+    public AudioSource sfxSource;
 
-    [Header("Audio Clips")]
-    public AudioClip dropSound;    // Tiếng bộp/vút khi đặt khối thạch xuống lưới
-    public AudioClip popSound;     // Tiếng pop giòn giã khi thạch match nổ combo
-    public AudioClip winSound;     // Tiếng chuông reo vang khi qua màn thắng cuộc
-    public AudioClip loseSound;    // Tiếng âm trầm dứt khoát khi kẹt lưới thua cuộc
+    [Header("🎵 Nhạc Nền")]
+    public AudioClip backgroundMusic;
+
+    [Header("✨ Hiệu Ứng Âm Thanh (Audio Clips)")]
+    [Tooltip("Tiếng 'pop' dùng cho cả 2 sự kiện: Click bốc khối ở Dock và Thả khối xuống lưới")]
+    public AudioClip popSound;
+
+    [Tooltip("Tiếng 'match' dùng riêng khi các khối màu chạm biên gộp nổ dây chuyền")]
+    public AudioClip matchSound;
+
+    public AudioClip winSound;
+    public AudioClip loseSound;
+
+    // ===================================================================
+    // 🚀 ĐƯỜNG TRUYỀN LIÊN THÔNG ĐÃ SỬA CHUẨN ĐÉT:
+    // Hễ bên DraggableGroup gọi chữ 'dropSound' cũ khi đặt thạch, 
+    // hệ thống sẽ tự động bốc tiếng 'popSound' ra phát mượt mà!
+    // ===================================================================
+    public AudioClip dropSound => popSound;
+    // ===================================================================
 
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this);
+            return;
         }
     }
 
-    void OnEnable()
+    void Start()
     {
-        // Đăng ký lắng nghe sự kiện từ GameManager để tự động phát âm thanh Win/Lose
-        GameManager.OnStateChanged += HandleGameStateAudio;
+        // TÌM TẤT CẢ LOA: Lấy danh sách toàn bộ cấu phần AudioSource đang nằm trên GameManager
+        AudioSource[] sources = GetComponents<AudioSource>();
+
+        // Phân bổ loa số 1 chuyên trị SFX ngắn
+        if (sources.Length >= 1) sfxSource = sources[0];
+        else sfxSource = gameObject.AddComponent<AudioSource>();
+
+        // Phân bổ loa số 2 chuyên trị Nhạc nền BGM
+        if (sources.Length >= 2) bgmSource = sources[1];
+        else bgmSource = gameObject.AddComponent<AudioSource>();
+
+        bgmSource.loop = true;
+
+        PlayBGM();
     }
 
-    void OnDisable()
+    public void PlayBGM()
     {
-        GameManager.OnStateChanged -= HandleGameStateAudio;
-    }
-
-    private void HandleGameStateAudio(GameState state)
-    {
-        switch (state)
+        if (backgroundMusic != null && bgmSource != null)
         {
-            case GameState.LevelWon:
-                PlaySound(winSound);
-                break;
-            case GameState.LevelLost:
-                PlaySound(loseSound);
-                break;
+            bgmSource.clip = backgroundMusic;
+            bgmSource.Play();
         }
     }
 
-    // Hàm API công khai dùng để phát âm thanh hiệu ứng một cách nhanh chóng
     public void PlaySound(AudioClip clip)
     {
-        if (efxSource != null && clip != null)
+        if (clip != null && sfxSource != null)
         {
-            efxSource.PlayOneShot(clip);
+            sfxSource.PlayOneShot(clip);
         }
     }
 }
