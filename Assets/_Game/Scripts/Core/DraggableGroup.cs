@@ -6,12 +6,13 @@ public class DraggableGroup : MonoBehaviour
     private Camera mainCamera;
     private Vector3 offset;
     private bool isDragging = false;
+    private Vector3 lastFramePosition;
     private Vector3 originalPosition;
     private float dragHeightOffset = 0.5f;
 
     [Header("Grid Snapping")]
     private GridManager gridManager;
-    public float snapThreshold = 1.5f; 
+    public float snapThreshold = 1.5f;
 
     private int mySlotIndex = -1;
     private DockManager myDockManager;
@@ -39,6 +40,7 @@ public class DraggableGroup : MonoBehaviour
         {
             myDockManager.NotifyDragStarted(mySlotIndex);
         }
+        lastFramePosition = transform.position;
     }
 
     void OnMouseDrag()
@@ -47,9 +49,22 @@ public class DraggableGroup : MonoBehaviour
 
         Vector3 mouseWorldPos = GetMouseWorldPosition();
         Vector3 targetPos = mouseWorldPos + offset;
-        targetPos.y = originalPosition.y + dragHeightOffset; 
-        
+        targetPos.y = originalPosition.y + dragHeightOffset;
+
         transform.position = targetPos;
+
+        // Tính toán tốc độ vuốt và hướng vuốt chuột/tay của người chơi
+        Vector3 dragVelocity = (transform.position - lastFramePosition) / Time.deltaTime;
+        Vector3 dragDir = dragVelocity.normalized;
+
+        // Quét qua các khối thạch con đang bị kéo và ra lệnh jiggle uốn lượn theo hướng vuốt
+        JellyJiggle[] jiggles = GetComponentsInChildren<JellyJiggle>();
+        foreach (var jiggle in jiggles)
+        {
+            if (jiggle != null) jiggle.UpdateJiggleOnDrag(dragVelocity.magnitude, dragDir);
+        }
+
+        lastFramePosition = transform.position; // Cập nhật mốc vị trí frame
     }
 
     void OnMouseUp()
@@ -60,8 +75,7 @@ public class DraggableGroup : MonoBehaviour
         if (TrySnapAndInjectData())
         {
             if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.dropSound);
-            
-            // Chạy hiệu ứng nảy dập dình tại tâm ô lưới
+
             JellyJuiceFX.PlayDropBounce(this.transform);
 
             if (myDockManager != null && mySlotIndex != -1)
@@ -74,9 +88,9 @@ public class DraggableGroup : MonoBehaviour
                 gridManager.RunResolutionLoop();
             }
 
-            Destroy(this); 
+            Destroy(this);
         }
-        else
+        else // TRƯỜNG HỢP KÉO RỚT RA NGOÀI LƯỚI (FAILED)
         {
             transform.position = originalPosition;
             if (myDockManager != null && mySlotIndex != -1)
@@ -84,13 +98,21 @@ public class DraggableGroup : MonoBehaviour
                 myDockManager.NotifyDragFailed(mySlotIndex, this.gameObject);
             }
             JellyJuiceFX.PlayDropBounce(this.transform);
+
+            // Kích hoạt hiệu ứng đàn hồi bẹp dí khi bay về khay Dock
+            // (Giúp trả viên thạch từ trạng thái "đang bị kéo dãn" về phom vuông vức ban đầu)
+            JellyJiggle[] jigglesOnFail = GetComponentsInChildren<JellyJiggle>();
+            foreach (var jiggle in jigglesOnFail)
+            {
+                if (jiggle != null) jiggle.PlayDropJiggle();
+            }
         }
     }
 
     private Vector3 GetMouseWorldPosition()
     {
         Vector3 mousePoint = Input.mousePosition;
-        mousePoint.z = mainCamera.transform.position.y - originalPosition.y; 
+        mousePoint.z = mainCamera.transform.position.y - originalPosition.y;
         return mainCamera.ScreenToWorldPoint(mousePoint);
     }
 
@@ -121,21 +143,19 @@ public class DraggableGroup : MonoBehaviour
                 // 1. KIỂM TRA CHỖ TRỐNG
                 foreach (var view in childViews)
                 {
-                    if (!targetCell.IsSlotFree(view.localSlot)) return false; 
+                    if (!targetCell.IsSlotFree(view.localSlot)) return false;
                 }
 
-                // ===================================================================
-                // FIX LỖI TRIỆT TIÊU SCALE: Ép cấu hình khay cha về mốc chuẩn 100% sạch sẽ
-                // ===================================================================
+                // Ép cấu hình khay cha về mốc chuẩn 100% sạch sẽ
                 Vector3 targetCellPos = hit.collider.transform.position;
-                
+
                 // Đổi cha về GridManager nhưng KHÔNG giữ cấu hình thừa (false)
                 transform.SetParent(gridManager.transform, false);
-                
+
                 // Ép cứng vị trí, trục xoay bằng 0 và kích thước chuẩn nguyên bản (1,1,1)
                 transform.position = new Vector3(targetCellPos.x, originalPosition.y, targetCellPos.z);
                 transform.rotation = Quaternion.identity;
-                transform.localScale = Vector3.one; 
+                transform.localScale = Vector3.one;
 
                 // 2. ĐĂNG KÝ MA TRẬN LOGIC NGẦM
                 foreach (var view in childViews)
@@ -154,6 +174,13 @@ public class DraggableGroup : MonoBehaviour
 
                 Transform bgLot = transform.Find("Img_Dock_Slot");
                 if (bgLot != null) Destroy(bgLot.gameObject);
+
+                //  Kích hoạt hiệu ứng nẩy bẹp dí rồi đàn hồi khi vừa đặt thạch chạm lưới thành công!
+                JellyJiggle[] jigglesOnDrop = GetComponentsInChildren<JellyJiggle>();
+                foreach (var jiggle in jigglesOnDrop)
+                {
+                    if (jiggle != null) jiggle.PlayDropJiggle();
+                }
 
                 return true;
             }
