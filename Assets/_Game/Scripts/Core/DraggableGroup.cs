@@ -126,14 +126,10 @@ public class DraggableGroup : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, 15f, gridLayerMask))
         {
-            if (hit.collider.name.StartsWith("GridCell_"))
+            GridCellTag cellTag = hit.collider.GetComponent<GridCellTag>();
+            if (cellTag != null)
             {
-                string[] parts = hit.collider.name.Split('_');
-                if (parts.Length < 3) return false;
-
-                int cellX = int.Parse(parts[1]);
-                int cellY = int.Parse(parts[2]);
-                Vector2Int targetCoord = new Vector2Int(cellX, cellY);
+                Vector2Int targetCoord = cellTag.Coord;
 
                 if (!gridManager.TryGetCell(targetCoord, out GridCell targetCell)) return false;
 

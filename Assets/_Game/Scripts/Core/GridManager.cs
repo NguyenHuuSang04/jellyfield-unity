@@ -309,6 +309,10 @@ public class GridManager : MonoBehaviour
                 GameObject cellObj = Instantiate(gridCellPrefab, visualPos, UnityEngine.Quaternion.Euler(90f, 0f, 0f), this.transform);
                 cellObj.name = $"GridCell_{coord.x}_{coord.y}";
                 cellObj.transform.localScale = new Vector3(cellSize * 0.96f, cellSize * 0.96f, 1f);
+
+                GridCellTag cellTag = cellObj.GetComponent<GridCellTag>();
+                if (cellTag == null) cellTag = cellObj.AddComponent<GridCellTag>();
+                cellTag.Coord = coord;
             }
         }
 
@@ -380,6 +384,10 @@ public class GridManager : MonoBehaviour
                     GameObject cellObj = Instantiate(gridCellPrefab, worldPos, Quaternion.Euler(90f, 0f, 0f), this.transform);
                     cellObj.name = $"GridCell_{x}_{y}";
                     cellObj.transform.localScale = new Vector3(cellSize * 0.96f, cellSize * 0.96f, 1f);
+
+                    GridCellTag cellTag = cellObj.GetComponent<GridCellTag>();
+                    if (cellTag == null) cellTag = cellObj.AddComponent<GridCellTag>();
+                    cellTag.Coord = coord;
                 }
             }
         }
