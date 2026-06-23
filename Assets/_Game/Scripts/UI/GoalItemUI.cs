@@ -1,38 +1,42 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using JellyField.Core;
 
-public class GoalItemUI : MonoBehaviour
+namespace JellyField.UI
 {
-    public Image iconImage;           // Gắn Component Image hiển thị hình thạch vào đây
-    public TextMeshProUGUI countText; // Gắn Component TextMeshPro hiển thị số lượng vào đây
-
-    [Header("Jelly Sprites Mapping")]
-    public Sprite purpleSprite; // Kéo ảnh 6.png vào đây
-    public Sprite blueSprite;   // Kéo ảnh 7.png vào đây
-    public Sprite greenSprite;  // Kéo ảnh 8.png vào đây
-    public Sprite pinkSprite;   // Kéo ảnh 9.png vào đây
-
-    // Hàm API nạp dữ liệu hình ảnh và số lượng mục tiêu tự động
-    public void SetupGoal(BlockColor color, int targetCount)
+    public class GoalItemUI : MonoBehaviour
     {
-        // 1. Cập nhật số lượng hiển thị (Ví dụ: "x 4")
-        if (countText != null) countText.text = $"x{targetCount}";
+        public Image iconImage;           // Gắn Component Image hiển thị hình thạch vào đây
+        public TextMeshProUGUI countText; // Gắn Component TextMeshPro hiển thị số lượng vào đây
 
-        // 2. Gán đúng hình ảnh Sprite căng mọng theo màu sắc cấu hình
-        if (iconImage != null)
+        [Header("Jelly Sprites Mapping")]
+        public Sprite purpleSprite; // Kéo ảnh 6.png vào đây
+        public Sprite blueSprite;   // Kéo ảnh 7.png vào đây
+        public Sprite greenSprite;  // Kéo ảnh 8.png vào đây
+        public Sprite pinkSprite;   // Kéo ảnh 9.png vào đây
+
+        // Hàm API nạp dữ liệu hình ảnh và số lượng mục tiêu tự động
+        public void SetupGoal(BlockColor color, int targetCount)
         {
-            switch (color)
+            // 1. Cập nhật số lượng hiển thị (Ví dụ: "x 4")
+            if (countText != null) countText.text = $"x{targetCount}";
+
+            // 2. Gán đúng hình ảnh Sprite căng mọng theo màu sắc cấu hình
+            if (iconImage != null)
             {
-                case BlockColor.Purple: iconImage.sprite = purpleSprite; break;
-                case BlockColor.Blue:   iconImage.sprite = blueSprite; break;
-                case BlockColor.Green:  iconImage.sprite = greenSprite; break;
-                case BlockColor.Pink:   iconImage.sprite = pinkSprite; break;
-                default: iconImage.sprite = null; break;
+                switch (color)
+                {
+                    case BlockColor.Purple: iconImage.sprite = purpleSprite; break;
+                    case BlockColor.Blue:   iconImage.sprite = blueSprite; break;
+                    case BlockColor.Green:  iconImage.sprite = greenSprite; break;
+                    case BlockColor.Pink:   iconImage.sprite = pinkSprite; break;
+                    default: iconImage.sprite = null; break;
+                }
+                
+                // Đảm bảo màu hiển thị của Image được reset về màu trắng gốc để không bị ám màu cũ
+                iconImage.color = Color.white;
             }
-            
-            // Đảm bảo màu hiển thị của Image được reset về màu trắng gốc để không bị ám màu cũ
-            iconImage.color = Color.white;
         }
     }
 }

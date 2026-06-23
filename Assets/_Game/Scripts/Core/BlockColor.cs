@@ -1,8 +1,11 @@
-public enum BlockColor
+namespace JellyField.Core
 {
-    None,
-    Purple,    
-    Green,     
-    Blue,     
-    Pink      
+    public enum BlockColor
+    {
+        None,
+        Purple,    
+        Green,     
+        Blue,     
+        Pink      
+    }
 }

@@ -1,12 +1,15 @@
 using UnityEngine;
 
-public class GridCellTag : MonoBehaviour
+namespace JellyField.Core
 {
-    [SerializeField] private Vector2Int coord;
-
-    public Vector2Int Coord
+    public class GridCellTag : MonoBehaviour
     {
-        get => coord;
-        set => coord = value;
+        [SerializeField] private Vector2Int coord;
+
+        public Vector2Int Coord
+        {
+            get => coord;
+            set => coord = value;
+        }
     }
 }

@@ -1,21 +1,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JellyBlock
+namespace JellyField.Core
 {
-    public int Id;
-    public BlockColor Color;
-    public HashSet<Vector2Int> LocalSlots = new HashSet<Vector2Int>();
-
-    public List<GameObject> VisualObjs = new List<GameObject>();
-
-    public JellyBlock(int id, BlockColor color, IEnumerable<Vector2Int> slots)
+    public class JellyBlock
     {
-        this.Id = id;
-        this.Color = color;
-        this.LocalSlots = new HashSet<Vector2Int>(slots);
-        
-        // Khởi tạo danh sách rỗng khi tạo khối mới
-        this.VisualObjs = new List<GameObject>();
+        public int Id { get; set; }
+        public BlockColor Color { get; set; }
+        public HashSet<Vector2Int> LocalSlots { get; set; } = new HashSet<Vector2Int>();
+
+        public JellyBlock(int id, BlockColor color, IEnumerable<Vector2Int> slots)
+        {
+            this.Id = id;
+            this.Color = color;
+            this.LocalSlots = new HashSet<Vector2Int>(slots);
+        }
     }
 }

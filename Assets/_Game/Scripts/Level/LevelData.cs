@@ -1,50 +1,54 @@
 using System.Collections.Generic;
 using UnityEngine;
+using JellyField.Core;
 
-[System.Serializable]
-public struct GoalEntry
+namespace JellyField.Level
 {
-    public BlockColor Color;
-    public int Count;
-}
+    [System.Serializable]
+    public struct GoalEntry
+    {
+        public BlockColor Color;
+        public int Count;
+    }
 
-[System.Serializable]
-public struct PrePlacedSubBlock
-{
-    [Tooltip("Vị trí ô góc vuông con bên trong ô lưới lớn (X: 0..1, Y: 0..1)")]
-    public Vector2Int LocalSlot;   
-    [Tooltip("Màu sắc của khối thạch con này")]
-    public BlockColor Color;       
-}
+    [System.Serializable]
+    public struct PrePlacedSubBlock
+    {
+        [Tooltip("Vị trí ô góc vuông con bên trong ô lưới lớn (X: 0..1, Y: 0..1)")]
+        public Vector2Int LocalSlot;   
+        [Tooltip("Màu sắc của khối thạch con này")]
+        public BlockColor Color;       
+    }
 
-[System.Serializable]
-public struct PrePlacedClusterEntry
-{
-    [Header("Copy số thực từ mục Active Cells dán vào đây")]
-    [Tooltip("Ví dụ: Nhập X = -2.86, Y = 0, Z = 1.52 cực kỳ tiện lợi.")]
-    public Vector3 GridWorldPos;   
+    [System.Serializable]
+    public struct PrePlacedClusterEntry
+    {
+        [Header("Copy số thực từ mục Active Cells dán vào đây")]
+        [Tooltip("Ví dụ: Nhập X = -2.86, Y = 0, Z = 1.52 cực kỳ tiện lợi.")]
+        public Vector3 GridWorldPos;   
 
-    [Tooltip("Danh sách các khối con bên trong ô này (Có thể tạo từ 1 đến 4 khối)")]
-    public List<PrePlacedSubBlock> Blocks;       
-}
+        [Tooltip("Danh sách các khối con bên trong ô này (Có thể tạo từ 1 đến 4 khối)")]
+        public List<PrePlacedSubBlock> Blocks;       
+    }
 
-[CreateAssetMenu(fileName = "NewLevelData", menuName = "JellyField/LevelData")]
-public class LevelData : ScriptableObject
-{
-    public int LevelIndex;
-    
-    [Header("Grid Shape")]
-    public List<Vector3> ActiveCells; 
+    [CreateAssetMenu(fileName = "NewLevelData", menuName = "JellyField/LevelData")]
+    public class LevelData : ScriptableObject
+    {
+        public int LevelIndex;
+        
+        [Header("Grid Shape")]
+        public List<Vector3> ActiveCells; 
 
-    [Header("Goals")]
-    public List<GoalEntry> Goals = new List<GoalEntry>();
+        [Header("Goals")]
+        public List<GoalEntry> Goals = new List<GoalEntry>();
 
-    [Header("Pre-Placed Clusters On Grid")]
-    public List<PrePlacedClusterEntry> PrePlacedClusters = new List<PrePlacedClusterEntry>();
+        [Header("Pre-Placed Clusters On Grid")]
+        public List<PrePlacedClusterEntry> PrePlacedClusters = new List<PrePlacedClusterEntry>();
 
-    [Header("Dock Settings")]
-    public int DockSlotCount = 2;
-    
-    [Header("Danh sách khối màu xuất hiện tuần tự")]
-    public List<ClusterData> PredefinedClusters = new List<ClusterData>(); // Cứ xếp khối gì trong này, game sẽ sinh ra y chang từ trái qua phải
+        [Header("Dock Settings")]
+        public int DockSlotCount = 2;
+        
+        [Header("Danh sách khối màu xuất hiện tuần tự")]
+        public List<ClusterData> PredefinedClusters = new List<ClusterData>(); // Cứ xếp khối gì trong này, game sẽ sinh ra y chang từ trái qua phải
+    }
 }

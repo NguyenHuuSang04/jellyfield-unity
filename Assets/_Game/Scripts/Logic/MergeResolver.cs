@@ -1,116 +1,127 @@
 using System.Collections.Generic;
 using UnityEngine;
+using JellyField.Core;
 
-public static class MergeResolver
+namespace JellyField.Logic
 {
-    // Hướng quét 4 phía kề cận (Ngang, Dọc - Không quét chéo) nội bộ ô 2x2
-    private static readonly Vector2Int[] Directions = {
-        new Vector2Int(1, 0),  // Phải
-        new Vector2Int(-1, 0), // Trái
-        new Vector2Int(0, 1),  // Trên
-        new Vector2Int(0, -1)  // Dưới
-    };
-
-    public static bool ResolveIntraCellMerge(GridCell cell)
+    public static class MergeResolver
     {
-        if (cell.Blocks.Count <= 1) return false; // Không đủ khối để gộp
+        // Hướng quét 4 phía kề cận (Ngang, Dọc - Không quét chéo) nội bộ ô 2x2
+        private static readonly Vector2Int[] Directions = {
+            new Vector2Int(1, 0),  // Phải
+            new Vector2Int(-1, 0), // Trái
+            new Vector2Int(0, 1),  // Trên
+            new Vector2Int(0, -1)  // Dưới
+        };
 
-        // Nhóm các khối thạch đang có trong ô lớn theo màu sắc
-        Dictionary<BlockColor, List<JellyBlock>> colorGroups = new Dictionary<BlockColor, List<JellyBlock>>();
-        foreach (var block in cell.Blocks)
+        public static bool ResolveIntraCellMerge(GridCell cell)
         {
-            if (block.Color == BlockColor.None) continue;
-            if (!colorGroups.ContainsKey(block.Color))
-                colorGroups[block.Color] = new List<JellyBlock>();
-            colorGroups[block.Color].Add(block);
-        }
+            if (cell.Blocks.Count <= 1) return false; // Không đủ khối để gộp
 
-        bool anyMergeHappened = false;
-        List<JellyBlock> newBlocksList = new List<JellyBlock>();
-
-        // Duyệt qua từng nhóm màu để xử lý gộp
-        foreach (var kvp in colorGroups)
-        {
-            BlockColor color = kvp.Key;
-            List<JellyBlock> blocksOfColor = kvp.Value;
-
-            if (blocksOfColor.Count >= 2)
+            // Nhóm các khối thạch đang có trong ô lớn theo màu sắc
+            Dictionary<BlockColor, List<JellyBlock>> colorGroups = new Dictionary<BlockColor, List<JellyBlock>>();
+            foreach (var block in cell.Blocks)
             {
-                // Thuật toán gộp: Gom toàn bộ các Sub-slot đơn lẻ của cùng một màu lại với nhau
-                HashSet<Vector2Int> combinedSlots = new HashSet<Vector2Int>();
-                List<GameObject> combinedVisuals = new List<GameObject>(); // Lưu visual gom được
-                int minId = int.MaxValue;
+                if (block.Color == BlockColor.None) continue;
+                if (!colorGroups.ContainsKey(block.Color))
+                    colorGroups[block.Color] = new List<JellyBlock>();
+                colorGroups[block.Color].Add(block);
+            }
 
-                foreach (var b in blocksOfColor)
+            bool anyMergeHappened = false;
+            List<JellyBlock> newBlocksList = new List<JellyBlock>();
+
+            // Duyệt qua từng nhóm màu để xử lý gộp
+            foreach (var kvp in colorGroups)
+            {
+                BlockColor color = kvp.Key;
+                List<JellyBlock> blocksOfColor = kvp.Value;
+
+                if (blocksOfColor.Count >= 2)
                 {
-                    combinedSlots.UnionWith(b.LocalSlots);
-                    if (b.VisualObjs != null) combinedVisuals.AddRange(b.VisualObjs); // Gom hình ảnh
-                    if (b.Id < minId) minId = b.Id;
-                }
+                    // Thuật toán gộp: Gom toàn bộ các Sub-slot đơn lẻ của cùng một màu lại với nhau
+                    HashSet<Vector2Int> combinedSlots = new HashSet<Vector2Int>();
+                    List<GameObject> combinedVisuals = new List<GameObject>(); // Lưu visual gom được
+                    int minId = int.MaxValue;
 
-                // Kiểm tra xem các ô con gộp lại có liền kề nhau hợp lệ không
-                if (ValidateAdjacency(combinedSlots))
-                {
-                    // Tạo một khối thạch mới to hơn đã được hợp nhất diện tích
-                    JellyBlock mergedBlock = new JellyBlock(minId, color, combinedSlots);
-                    mergedBlock.VisualObjs = combinedVisuals; // Kế thừa trọn vẹn danh sách hình ảnh!
+                    foreach (var b in blocksOfColor)
+                    {
+                        combinedSlots.UnionWith(b.LocalSlots);
+                        var visuals = GridManager.Instance.GetVisuals(b.Id);
+                        if (visuals != null) combinedVisuals.AddRange(visuals); // Gom hình ảnh
+                        if (b.Id < minId) minId = b.Id;
+                    }
 
-                    newBlocksList.Add(mergedBlock);
-                    anyMergeHappened = true;
+                    // Kiểm tra xem các ô con gộp lại có liền kề nhau hợp lệ không
+                    if (ValidateAdjacency(combinedSlots))
+                    {
+                        // Tạo một khối thạch mới to hơn đã được hợp nhất diện tích
+                        JellyBlock mergedBlock = new JellyBlock(minId, color, combinedSlots);
+                        
+                        // Hủy đăng ký visual cũ và đăng ký visual gộp mới cho mergedBlock
+                        foreach (var b in blocksOfColor)
+                        {
+                            GridManager.Instance.UnregisterVisuals(b.Id);
+                        }
+                        GridManager.Instance.RegisterVisuals(mergedBlock.Id, combinedVisuals);
+
+                        newBlocksList.Add(mergedBlock);
+                        anyMergeHappened = true;
+                    }
+                    else
+                    {
+                        // Nếu không kề nhau (ví dụ nằm chéo góc nhau), giữ nguyên không gộp
+                        newBlocksList.AddRange(blocksOfColor);
+                    }
                 }
                 else
                 {
-                    // Nếu không kề nhau (ví dụ nằm chéo góc nhau), giữ nguyên không gộp
+                    // Chỉ có 1 khối màu này, giữ nguyên
                     newBlocksList.AddRange(blocksOfColor);
                 }
             }
-            else
+
+            // Nếu có gộp xảy ra, cập nhật lại danh sách khối thực tế của ô lưới lớn
+            if (anyMergeHappened)
             {
-                // Chỉ có 1 khối màu này, giữ nguyên
-                newBlocksList.AddRange(blocksOfColor);
+                cell.Blocks = newBlocksList;
             }
+
+            return anyMergeHappened;
         }
 
-        // Nếu có gộp xảy ra, cập nhật lại danh sách khối thực tế của ô lưới lớn
-        if (anyMergeHappened)
+        // Thuật toán kiểm tra tính liền kề bằng kỹ thuật BFS / Loang đơn giản
+        private static bool ValidateAdjacency(HashSet<Vector2Int> slots)
         {
-            cell.Blocks = newBlocksList;
-        }
+            if (slots.Count <= 1) return true;
 
-        return anyMergeHappened;
-    }
+            HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+            Queue<Vector2Int> queue = new Queue<Vector2Int>();
 
-    // Thuật toán kiểm tra tính liền kề bằng kỹ thuật BFS / Loang đơn giản
-    private static bool ValidateAdjacency(HashSet<Vector2Int> slots)
-    {
-        if (slots.Count <= 1) return true;
+            // Bốc đại một ô con làm điểm xuất phát
+            var enumerator = slots.GetEnumerator();
+            enumerator.MoveNext();
+            Vector2Int start = enumerator.Current;
 
-        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
-        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+            queue.Enqueue(start);
+            visited.Add(start);
 
-        // Bốc đại một ô con làm điểm xuất phát
-        var enumerator = slots.GetEnumerator();
-        enumerator.MoveNext();
-        Vector2Int start = enumerator.Current;
-
-        queue.Enqueue(start);
-        visited.Add(start);
-
-        while (queue.Count > 0)
-        {
-            Vector2Int current = queue.Dequeue();
-            foreach (var dir in Directions)
+            while (queue.Count > 0)
             {
-                Vector2Int neighbor = current + dir;
-                if (slots.Contains(neighbor) && !visited.Contains(neighbor))
+                Vector2Int current = queue.Dequeue();
+                foreach (var dir in Directions)
                 {
-                    visited.Add(neighbor);
-                    queue.Enqueue(neighbor);
+                    Vector2Int neighbor = current + dir;
+                    if (slots.Contains(neighbor) && !visited.Contains(neighbor))
+                    {
+                        visited.Add(neighbor);
+                        queue.Enqueue(neighbor);
+                    }
                 }
             }
-        }
 
-        // Nếu số ô đi qua bằng đúng tổng số ô ban đầu nghĩa là cụm khối dính liền nhau hợp lệ
-        return visited.Count == slots.Count;
+            // Nếu số ô đi qua bằng đúng tổng số ô ban đầu nghĩa là cụm khối dính liền nhau hợp lệ
+            return visited.Count == slots.Count;
+        }
     }
 }
