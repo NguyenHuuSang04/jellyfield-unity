@@ -57,7 +57,7 @@ namespace JellyField.Managers
         private void SetupRuntimeGoals()
         {
             runtimeGoals.Clear();
-            GridManager grid = Object.FindFirstObjectByType<GridManager>();
+            GridManager grid = GridManager.Instance;
             
             if (grid != null && grid.CurrentLevelData != null)
             {
@@ -88,13 +88,7 @@ namespace JellyField.Managers
             }
         }
 
-        // ===================================================================
-        // BỔ SUNG TƯƠNG THÍCH NGƯỢC: Giúp DebugOverlay.cs không bị lỗi biên dịch
-        // ===================================================================
-        public void AddGoalProgress(int progress)
-        {
-            // Hàm phụ trợ để các script cũ gọi không bị crash compiler
-        }
+
 
         private void CheckWinCondition()
         {

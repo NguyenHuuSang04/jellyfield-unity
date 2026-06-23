@@ -149,7 +149,7 @@ namespace JellyField.Core
             if (isGridFull)
             {
                 Debug.Log("<color=red>[GridResolver]: LƯỚI ĐÃ BỊ LẤP ĐẦY! BUNG LOSE PANEL TRỰC TIẾP.</color>");
-                GameUIManager uiManager = Object.FindFirstObjectByType<GameUIManager>();
+                GameUIManager uiManager = GameUIManager.Instance;
                 if (uiManager != null) uiManager.TriggerLoseState();
             }
         }

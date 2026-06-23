@@ -2840,6 +2840,7 @@ MonoBehaviour:
   cellSize: 1.4
   gridCellPrefab: {fileID: 8757137090691203917, guid: b2701a53db222f245b87328acbc01911, type: 3}
   jellyBlockPrefab: {fileID: 2333392007467351786, guid: 1ff2a034c685d9a45ac3110d3c4532af, type: 3}
+  dockManager: {fileID: 251925351}
   dropDelayBeforePop: 0.4
   cellGapPercent: 0
   currentLevelData: {fileID: 11400000, guid: b3ed01d816a982049982a38c637682ae, type: 2}

@@ -27,11 +27,6 @@ namespace JellyField.UI
                 else if (GameManager.Instance.CurrentState == GameState.Playing)
                 {
                     // Giả lập các nút bấm thay thế UI thật để kiểm thử tính năng
-                    if (GUILayout.Button("GIẢ LẬP THẮNG (Cộng 1 điểm Goal)", GUILayout.Height(35)))
-                    {
-                        GameManager.Instance.AddGoalProgress(1);
-                    }
-
                     if (GUILayout.Button("GIẢ LẬP THUA (Kẹt lưới)", GUILayout.Height(35)))
                     {
                         GameManager.Instance.ChangeState(GameState.LevelLost);

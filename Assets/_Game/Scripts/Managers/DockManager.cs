@@ -119,7 +119,7 @@ namespace JellyField.Managers
                     ClusterVisual visualScript = clusterObj.GetComponent<ClusterVisual>();
                     if (visualScript != null)
                     {
-                        visualScript.BuildCluster(nextCluster);
+                        visualScript.BuildCluster(nextCluster, gridManager);
                     }
 
                     DraggableGroup dragScript = clusterObj.GetComponent<DraggableGroup>();
@@ -162,6 +162,21 @@ namespace JellyField.Managers
         {
             this.slotCount = targetSlots;
             InitDock(gridManager, generator, targetSlots);
+        }
+
+        public void ClearDock()
+        {
+            foreach (var obj in activeSpawnedClusters)
+            {
+                if (obj != null) Destroy(obj);
+            }
+            activeSpawnedClusters.Clear();
+
+            foreach (var bg in spawnedSlotBackgrounds)
+            {
+                if (bg != null) Destroy(bg);
+            }
+            spawnedSlotBackgrounds.Clear();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace JellyField.Core
         {
             mainCamera = Camera.main;
             originalPosition = transform.position;
-            gridManager = Object.FindFirstObjectByType<GridManager>();
+            gridManager = GridManager.Instance;
         }
 
         public void SetSlotInfo(int slotIndex, DockManager dock)
@@ -165,7 +165,7 @@ namespace JellyField.Core
                     // 2. ĐĂNG KÝ MA TRẬN LOGIC NGẦM
                     foreach (var view in childViews)
                     {
-                        JellyBlock newLogicBlock = new JellyBlock(Random.Range(1000, 9999), view.BlockColor, new List<Vector2Int> { view.LocalSlot });
+                        JellyBlock newLogicBlock = new JellyBlock(JellyBlock.GenerateUniqueId(), view.BlockColor, new List<Vector2Int> { view.LocalSlot });
                         gridManager.RegisterVisuals(newLogicBlock.Id, new List<GameObject> { view.gameObject });
                         targetCell.Blocks.Add(newLogicBlock);
                     }

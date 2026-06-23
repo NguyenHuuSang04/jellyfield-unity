@@ -5,6 +5,9 @@ namespace JellyField.Core
 {
     public class JellyBlock
     {
+        private static int _nextId = 1;
+        public static int GenerateUniqueId() => _nextId++;
+
         public int Id { get; set; }
         public BlockColor Color { get; set; }
         public HashSet<Vector2Int> LocalSlots { get; set; } = new HashSet<Vector2Int>();

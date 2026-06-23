@@ -20,6 +20,7 @@ namespace JellyField.Core
         [SerializeField] private float cellSize = 1.4f;
         [SerializeField] private GameObject gridCellPrefab;
         [SerializeField] private GameObject jellyBlockPrefab;
+        [SerializeField] private DockManager dockManager;
 
         [SerializeField] private float dropDelayBeforePop = 0.4f;
 
@@ -76,6 +77,11 @@ namespace JellyField.Core
             
             cellLayout = GetComponent<CellLayoutView>();
             if (cellLayout == null) cellLayout = gameObject.AddComponent<CellLayoutView>();
+
+            if (dockManager == null)
+            {
+                dockManager = Object.FindFirstObjectByType<DockManager>(FindObjectsInactive.Include);
+            }
         }
 
         void OnEnable() { GameManager.OnStateChanged += HandleStateChanged; }
@@ -102,25 +108,14 @@ namespace JellyField.Core
             if (currentLevelData != null) SetupLevelGrid(currentLevelData);
             else SetupDefaultRectangleGrid(5, 4);
 
-            // Đánh thức các ô Static_Slot_BG đang lẩn khuất (dành cho các ô được thiết kế tĩnh)
-            GameObject[] allObjects = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            foreach (var go in allObjects)
+            if (dockManager != null)
             {
-                if (go != null && go.name.StartsWith("Static_Slot_BG"))
-                {
-                    go.SetActive(true);
-                }
-            }
-
-            DockManager dock = Object.FindFirstObjectByType<DockManager>(FindObjectsInactive.Include);
-            if (dock != null)
-            {
-                dock.gameObject.SetActive(true);
+                dockManager.gameObject.SetActive(true);
 
                 //  Ép tất cả các màn chơi chạy bộ sinh tuần tự cố định từ LevelData
                 IClusterGenerator levelGen = new FixedQueueGenerator(currentLevelData.PredefinedClusters);
 
-                dock.InitDock(this, levelGen, currentLevelData.DockSlotCount);
+                dockManager.InitDock(this, levelGen, currentLevelData.DockSlotCount);
             }
         }
 
@@ -195,7 +190,7 @@ namespace JellyField.Core
                                 viewScript.SetColorView(subBlock.Color);
                             }
 
-                            JellyBlock newLogicBlock = new JellyBlock(Random.Range(10000, 99999), subBlock.Color, new List<Vector2Int> { subBlock.LocalSlot });
+                            JellyBlock newLogicBlock = new JellyBlock(JellyBlock.GenerateUniqueId(), subBlock.Color, new List<Vector2Int> { subBlock.LocalSlot });
                             RegisterVisuals(newLogicBlock.Id, new List<GameObject> { blockObj });
 
                             targetCell.Blocks.Add(newLogicBlock);
@@ -246,39 +241,30 @@ namespace JellyField.Core
         public void ClearActiveBoard()
         {
             Cells.Clear();
+
+            // Hủy các block visuals thông qua blockVisuals dictionary
+            foreach (var kvp in blockVisuals)
+            {
+                if (kvp.Value != null)
+                {
+                    foreach (var visual in kvp.Value)
+                    {
+                        if (visual != null) Destroy(visual);
+                    }
+                }
+            }
             blockVisuals.Clear();
 
-            JellyBlockView[] allViews = Object.FindObjectsByType<JellyBlockView>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            foreach (var view in allViews)
-            {
-                if (view != null) Destroy(view.gameObject);
-            }
-
+            // Hủy các đối tượng con dưới GridManager (như Grid Cells...)
             foreach (Transform child in this.transform)
             {
                 if (child != null) Destroy(child.gameObject);
             }
 
-            DockManager dock = Object.FindFirstObjectByType<DockManager>(FindObjectsInactive.Include);
-            if (dock != null)
+            if (dockManager != null)
             {
-                dock.gameObject.SetActive(false);
-            }
-
-            GameObject[] allGameObjects = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            foreach (var go in allGameObjects)
-            {
-                if (go != null)
-                {
-                    if (go.name.StartsWith("Static_Slot_BG"))
-                    {
-                        go.SetActive(false);
-                    }
-                    else if (go.name.StartsWith("Dock_Cluster") || go.name.Contains("DockSlotBG"))
-                    {
-                        Destroy(go);
-                    }
-                }
+                dockManager.ClearDock();
+                dockManager.gameObject.SetActive(false);
             }
 
             Debug.Log("[GridManager]: Trận địa cũ đã được dọn dẹp sạch sẽ và giấu khay dock an toàn.");

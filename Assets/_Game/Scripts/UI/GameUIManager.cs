@@ -13,6 +13,8 @@ namespace JellyField.UI
 {
     public class GameUIManager : MonoBehaviour
     {
+        public static GameUIManager Instance { get; private set; }
+
         [Header("🏢 Bộ Khung Panels Hệ Thống")]
         [SerializeField] private GameObject mainMenuPanel;
         [SerializeField] private GameObject gameplayHUDPanel;
@@ -50,7 +52,8 @@ namespace JellyField.UI
 
         void Awake()
         {
-            gridManager = Object.FindFirstObjectByType<GridManager>();
+            if (Instance == null) Instance = this;
+            gridManager = GridManager.Instance;
         }
 
         void OnEnable()
@@ -123,7 +126,7 @@ namespace JellyField.UI
             PopulatePanelGoals(winGoalContainer, true);
 
             bool isLastLevel = false;
-            if (gridManager == null) gridManager = Object.FindFirstObjectByType<GridManager>();
+            if (gridManager == null) gridManager = GridManager.Instance;
 
             if (gridManager != null && gridManager.CurrentLevelData != null)
             {
@@ -168,7 +171,7 @@ namespace JellyField.UI
 
         private void GenerateLevelUI()
         {
-            if (gridManager == null) gridManager = Object.FindFirstObjectByType<GridManager>();
+            if (gridManager == null) gridManager = GridManager.Instance;
             if (gridManager == null || gridManager.CurrentLevelData == null) return;
 
             LevelData currentLevel = gridManager.CurrentLevelData;
@@ -243,7 +246,7 @@ namespace JellyField.UI
 
         private void LoadNextLevel()
         {
-            if (gridManager == null) gridManager = Object.FindFirstObjectByType<GridManager>();
+            if (gridManager == null) gridManager = GridManager.Instance;
             if (gridManager == null || gridManager.AllLevels == null || gridManager.AllLevels.Count == 0) return;
 
             int currentIndex = gridManager.AllLevels.IndexOf(gridManager.CurrentLevelData);

@@ -15,12 +15,11 @@ namespace JellyField.View
         [SerializeField] private float gapPercent = 0.0f; // Mặc định bằng 0 để các khối khít sát nhau
 
         // Hàm tự động tính toán kích thước và vị trí thông minh lấp đầy 100% diện tích khay
-        public void BuildCluster(ClusterData data)
+        public void BuildCluster(ClusterData data, GridManager manager)
         {
             if (jellyBlockPrefab == null || data == null || data.Blocks == null || data.Blocks.Count == 0) return;
 
-            // Bốc trực tiếp cellSize từ GridManager để làm gốc tính toán hình học
-            GridManager manager = Object.FindFirstObjectByType<GridManager>();
+            // Sử dụng GridManager truyền vào để làm gốc tính toán hình học
             float size = manager != null ? manager.CellSize : 1.4f;
 
             float maxSubBlockSize = size / 2f;
