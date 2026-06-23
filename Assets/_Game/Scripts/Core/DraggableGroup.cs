@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using JellyField.View;
 using JellyField.Managers;
+using UnityEngine.InputSystem;
 
 namespace JellyField.Core
 {
@@ -34,11 +35,46 @@ namespace JellyField.Core
             this.myDockManager = dock;
         }
 
-        void OnMouseDown()
+        void Update()
+        {
+            Pointer pointer = Pointer.current;
+            if (pointer == null) return;
+
+            Vector2 screenPos = pointer.position.ReadValue();
+            bool wasPressed = pointer.press.wasPressedThisFrame;
+            bool isPressed = pointer.press.isPressed;
+            bool wasReleased = pointer.press.wasReleasedThisFrame;
+
+            if (wasPressed)
+            {
+                Ray ray = mainCamera.ScreenPointToRay(screenPos);
+                if (Physics.Raycast(ray, out RaycastHit hit, 100f))
+                {
+                    if (hit.collider.gameObject == this.gameObject || hit.transform.IsChildOf(this.transform))
+                    {
+                        StartDrag(screenPos);
+                    }
+                }
+            }
+            else if (isDragging)
+            {
+                if (isPressed)
+                {
+                    ContinueDrag(screenPos);
+                }
+
+                if (wasReleased || !isPressed)
+                {
+                    EndDrag();
+                }
+            }
+        }
+
+        private void StartDrag(Vector2 screenPos)
         {
             isDragging = true;
-            Vector3 mouseWorldPos = GetMouseWorldPosition();
-            offset = transform.position - mouseWorldPos;
+            Vector3 worldPos = GetPointerWorldPosition(screenPos);
+            offset = transform.position - worldPos;
 
             if (myDockManager != null && mySlotIndex != -1)
             {
@@ -47,12 +83,10 @@ namespace JellyField.Core
             lastFramePosition = transform.position;
         }
 
-        void OnMouseDrag()
+        private void ContinueDrag(Vector2 screenPos)
         {
-            if (!isDragging) return;
-
-            Vector3 mouseWorldPos = GetMouseWorldPosition();
-            Vector3 targetPos = mouseWorldPos + offset;
+            Vector3 worldPos = GetPointerWorldPosition(screenPos);
+            Vector3 targetPos = worldPos + offset;
             targetPos.y = originalPosition.y + dragHeightOffset;
 
             transform.position = targetPos;
@@ -76,7 +110,7 @@ namespace JellyField.Core
             }
         }
 
-        void OnMouseUp()
+        private void EndDrag()
         {
             isDragging = false;
 
@@ -118,10 +152,9 @@ namespace JellyField.Core
             }
         }
 
-        private Vector3 GetMouseWorldPosition()
+        private Vector3 GetPointerWorldPosition(Vector2 screenPos)
         {
-            Vector3 mousePoint = Input.mousePosition;
-            mousePoint.z = mainCamera.transform.position.y - originalPosition.y;
+            Vector3 mousePoint = new Vector3(screenPos.x, screenPos.y, mainCamera.transform.position.y - originalPosition.y);
             return mainCamera.ScreenToWorldPoint(mousePoint);
         }
 

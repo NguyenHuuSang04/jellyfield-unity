@@ -36,9 +36,7 @@ namespace JellyField.Core
             {
                 hasChanges = false;
 
-                // ===================================================================
-                // 🔋 BƯỚC A: XỬ LÝ GỘP MÀU NỘI BỘ TRONG TỪNG Ô TRƯỚC (INTRA-CELL)
-                // ===================================================================
+                // BƯỚC A: XỬ LÝ GỘP MÀU NỘI BỘ TRONG TỪNG Ô TRƯỚC (INTRA-CELL)
                 foreach (var cell in gridManager.ActiveCells)
                 {
                     if (MergeResolver.ResolveIntraCellMerge(cell))
@@ -49,9 +47,8 @@ namespace JellyField.Core
                     }
                 }
 
-                // ===================================================================
-                // 💥 BƯỚC B: XỬ LÝ QUÉT CỤM NỔ MATCH GIỮA CÁC Ô (INTER-CELL)
-                // ===================================================================
+
+                // BƯỚC B: XỬ LÝ QUÉT CỤM NỔ MATCH GIỮA CÁC Ô (INTER-CELL)
                 var matchGroups = MatchResolver.ResolveInterCellMatch(gridManager);
                 if (matchGroups.Count > 0)
                 {
@@ -61,7 +58,7 @@ namespace JellyField.Core
                     matchGroups.Sort((a, b) => CalculateCascadePotential(b).CompareTo(CalculateCascadePotential(a)));
                     var singleGroup = matchGroups[0];
 
-                    // 📦 Ghi nhận thông số màu nổ trước, tạm giữ lại chưa báo GameManager vội để chống Win sớm
+                    // Ghi nhận thông số màu nổ trước, tạm giữ lại chưa báo GameManager vội để chống Win sớm
                     BlockColor groupColor = BlockColor.None;
                     int dynamicProgress = 0;
                     if (singleGroup.Count >= 2)
@@ -70,7 +67,7 @@ namespace JellyField.Core
                         dynamicProgress = singleGroup.Count - 1;
                     }
 
-                    // 🌟 PHA 1: CHỈ CHO CÁC KHỐI TRONG CỤM MATCH PHÓNG NỔ BẮN HẠT ĐỒNG MÀU
+                    // PHA 1: CHỈ CHO CÁC KHỐI TRONG CỤM MATCH PHÓNG NỔ BẮN HẠT ĐỒNG MÀU
                     foreach (var explodedBlock in singleGroup)
                     {
                         var visuals = gridManager.GetVisuals(explodedBlock.Id);
@@ -98,16 +95,16 @@ namespace JellyField.Core
                         gridManager.UnregisterVisuals(explodedBlock.Id);
                     }
 
-                    // ⏳ ĐỢI CỤM MATCH CO NHỎ NỔ BẮN HẠT XONG XUÔI (Mất 0.27 giây)
+                    //  ĐỢI CỤM MATCH CO NHỎ NỔ BẮN HẠT XONG XUÔI (Mất 0.27 giây)
                     yield return new WaitForSeconds(0.27f);
 
-                    // 🔥 THỜI ĐIỂM VÀNG: Viên thạch Goal cuối cùng biến mất sạch sẽ, giờ mới bung bảng WIN!
+                    //  THỜI ĐIỂM VÀNG: Viên thạch Goal cuối cùng biến mất sạch sẽ, giờ mới bung bảng WIN!
                     if (GameManager.Instance != null && groupColor != BlockColor.None)
                     {
                         GameManager.Instance.TrackPoppedBlocks(groupColor, dynamicProgress);
                     }
 
-                    // 🌟 PHA 2: SAU KHI NỔ XONG, MỚI UPDATE DATA LOGIC VÀ RA LỆNH CHO KHỐI CÒN LẠI DẠT HÀNG
+                    //  PHA 2: SAU KHI NỔ XONG, MỚI UPDATE DATA LOGIC VÀ RA LỆNH CHO KHỐI CÒN LẠI DẠT HÀNG
                     HashSet<GridCell> affectedCells = new HashSet<GridCell>();
 
                     foreach (var explodedBlock in singleGroup)

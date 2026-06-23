@@ -16,7 +16,7 @@ namespace JellyField.Editor
             LevelEditorBackend script = (LevelEditorBackend)target;
 
             GUILayout.Space(15);
-            GUILayout.Label("🛠️ KHU VỰC THIẾT KẾ MÀN CHƠI NHANH", EditorStyles.boldLabel);
+            GUILayout.Label(" KHU VỰC THIẾT KẾ MÀN CHƠI NHANH", EditorStyles.boldLabel);
 
             // Nút 1: Sinh vùng làm việc rỗng để thiết kế
             GUI.backgroundColor = Color.cyan;
@@ -29,7 +29,7 @@ namespace JellyField.Editor
 
             // Nút 2: Quét Scene và đóng gói lưu vào ScriptableObject
             GUI.backgroundColor = Color.green;
-            if (GUILayout.Button("2. Đóng Gói & Lưu Lại (Save to Asset) 💾", GUILayout.Height(40)))
+            if (GUILayout.Button("2. Đóng Gói & Lưu Lại (Save to Asset) ", GUILayout.Height(40)))
             {
                 script.SaveCurrentLayoutToAsset();
             }

@@ -30,7 +30,7 @@ namespace JellyField.Core
         [Header("Level Asset")]
         [SerializeField] private LevelData currentLevelData;
 
-        [Header("🎯 Toàn Bộ Các Màn Chơi Hệ Thống")]
+        [Header("Toàn Bộ Các Màn Chơi Hệ Thống")]
         [SerializeField] private List<LevelData> allLevels = new List<LevelData>();
 
         public float CellSize => cellSize;

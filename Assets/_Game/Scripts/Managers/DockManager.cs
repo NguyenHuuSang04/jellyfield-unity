@@ -16,12 +16,12 @@ namespace JellyField.Managers
         [SerializeField] private GameObject clusterVisualPrefab;
         [SerializeField] private GameObject dockSlotBackgroundPrefab;
 
-        [Header("📐 Bộ Căn Chỉnh Vị Trí Dock (Inspector)")]
+        [Header("Bộ Căn Chỉnh Vị Trí Dock (Inspector)")]
         [SerializeField] private float dockZPosition = -1.5f;
         [SerializeField] private float dockYHeight = 0.5f;
         [SerializeField] private float slotSpacing = 2.5f;
 
-        [Header("🎨 Tùy Chỉnh Ô Nền Tĩnh (37.jpg)")]
+        [Header("Tùy Chỉnh Ô Nền Tĩnh (37.jpg)")]
         [Tooltip("Độ lệch tầng Y của ô nền so với thạch. Nên để tầm -0.52f để đẩy ô nền nằm HẲN XUỐNG DƯỚI đáy khối thạch 3D.")]
         [SerializeField] private float slotBGYOffset = -0.52f;
 
@@ -65,7 +65,7 @@ namespace JellyField.Managers
             {
                 float posX = gridManager.transform.position.x + (i - (slotCount - 1) / 2f) * slotSpacing;
 
-                // ĐÃ NÂNG CẤP: Ép độ cao Y đi theo slotBGYOffset tùy biến ngoài Inspector để chìm xuống đáy hoàn toàn
+                // Ép độ cao Y đi theo slotBGYOffset tùy biến ngoài Inspector để chìm xuống đáy hoàn toàn
                 Vector3 bgPos = new Vector3(posX, dockYHeight + slotBGYOffset, dockZPosition);
 
                 GameObject bgObj = Instantiate(dockSlotBackgroundPrefab, bgPos, UnityEngine.Quaternion.Euler(90f, 0f, 0f), this.transform);
@@ -79,7 +79,7 @@ namespace JellyField.Managers
                     {
                         float baseScale = gridManager.CellSize / spriteRealWidth;
 
-                        // ĐÃ NÂNG CẤP: Tách biệt hoàn toàn tỉ lệ phóng theo 2 chiều Ngang - Dọc theo ý Sang
+                        // Tách biệt hoàn toàn tỉ lệ phóng theo 2 chiều Ngang - Dọc 
                         float finalScaleX = baseScale * slotBGWidthMultiplier;
                         float finalScaleY = baseScale * slotBGLengthMultiplier;
 

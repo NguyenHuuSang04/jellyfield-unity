@@ -70,7 +70,7 @@ namespace JellyField.View
             Vector3 localDir = transform.InverseTransformDirection(dragDirection.normalized);
             Vector3 targetBend = new Vector3(localDir.x * bendIntensity, 0f, localDir.z * bendIntensity);
 
-            // BẢO VỆ: Xóa ngay tween của frame trước để giải phóng CPU trước khi tạo lệnh mới
+            // : Xóa ngay tween của frame trước để giải phóng CPU trước khi tạo lệnh mới
             if (jiggleTween != null && jiggleTween.IsActive()) jiggleTween.Kill();
 
             jiggleTween = DOTween.To(() => currentBendVector, x =>

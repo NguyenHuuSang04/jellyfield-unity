@@ -15,35 +15,35 @@ namespace JellyField.UI
     {
         public static GameUIManager Instance { get; private set; }
 
-        [Header("🏢 Bộ Khung Panels Hệ Thống")]
+        [Header("Bộ Khung Panels Hệ Thống")]
         [SerializeField] private GameObject mainMenuPanel;
         [SerializeField] private GameObject gameplayHUDPanel;
         [SerializeField] private GameObject resultPopupPanel;
 
-        [Header("🎯 Bảng Thông Báo Win/Lose Mới")]
+        [Header("Bảng Thông Báo Win/Lose Mới")]
         [SerializeField] private GameObject winPanel;
         [SerializeField] private GameObject losePanel;
 
-        [Header("📦 Khai Báo Khay Chứa Goal")]
+        [Header("Khai Báo Khay Chứa Goal")]
         [SerializeField] private Transform goalContainerParent;
         [SerializeField] private Transform winGoalContainer;
         [SerializeField] private Transform loseGoalContainer;
 
-        [Header("🎨 Prefabs Hiển Thị")]
+        [Header("Prefabs Hiển Thị")]
         [SerializeField] private GameObject goalItemPrefab;
         [SerializeField] private GameObject goalUiPrefab;
 
-        [Header("🔢 Dynamic HUD Text Elements")]
+        [Header("Dynamic HUD Text Elements")]
         [SerializeField] private TextMeshProUGUI levelTitleText;
         [SerializeField] private TextMeshProUGUI resultStatusText;
 
-        [Header("🎛️ Bộ Nút Bấm Điều Hướng Popups")]
+        [Header("Bộ Nút Bấm Điều Hướng Popups")]
         [SerializeField] private Button btnHomeWin;
         [SerializeField] private Button btnNextLevel;
         [SerializeField] private Button btnHomeLose;
         [SerializeField] private Button btnRetry;
 
-        [Header("🔄 Nút Chơi Lại Đặc Biệt Trên WinPanel (Màn Cuối)")]
+        [Header("Nút Chơi Lại Đặc Biệt Trên WinPanel (Màn Cuối)")]
         [SerializeField] private Button btnRetryWin;
 
         private List<GameObject> spawnedGoalItems = new List<GameObject>();
@@ -155,7 +155,7 @@ namespace JellyField.UI
         {
             if (gameplayHUDPanel != null) gameplayHUDPanel.SetActive(false);
             if (resultPopupPanel != null) resultPopupPanel.SetActive(true);
-            if (resultStatusText != null) resultStatusText.text = "GAME OVER 😢";
+            if (resultStatusText != null) resultStatusText.text = "GAME OVER ";
 
             if (losePanel != null)
             {
@@ -261,9 +261,7 @@ namespace JellyField.UI
             }
         }
 
-        // ===================================================================
-        // 🔄 ĐÃ SỬA CHUẨN: Giữ lại duy nhất bộ hàm chuyển Scene xịn sò của Sang
-        // ===================================================================
+
         private void GoToHome()
         {
             Debug.Log("[GameUIManager]: Bấm HOME -> Chuyển từ GameplayScene quay về MenuScene.");
@@ -276,9 +274,8 @@ namespace JellyField.UI
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameplayScene");
         }
 
-        // ===================================================================
-        // 🔥 ĐÃ KHÔI PHỤC: Các hàm kết nối Inspector cho nút bấm trên màn hình HUD
-        // ===================================================================
+
+        //  Các hàm kết nối Inspector cho nút bấm trên màn hình HUD
         public void OnPlayButtonPressed() => GameManager.Instance.StartGame();
         public void OnRetryButtonPressed() => RestartLevel();
         public void OnMenuButtonPressed() => GoToHome();

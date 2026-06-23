@@ -119,7 +119,7 @@ namespace JellyField.Managers
             return 0;
         }
 
-        // ĐÃ SỬA THÀNH PUBLIC: Để DebugOverlay.cs có quyền gọi thoải mái
+        //  SỬA THÀNH PUBLIC: Để DebugOverlay.cs có quyền gọi thoải mái
         public void ChangeState(GameState newState)
         {
             CurrentState = newState;

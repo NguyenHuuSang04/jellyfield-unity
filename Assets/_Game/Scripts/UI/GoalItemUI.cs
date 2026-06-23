@@ -11,10 +11,10 @@ namespace JellyField.UI
         public TextMeshProUGUI countText; // Gắn Component TextMeshPro hiển thị số lượng vào đây
 
         [Header("Jelly Sprites Mapping")]
-        public Sprite purpleSprite; // Kéo ảnh 6.png vào đây
-        public Sprite blueSprite;   // Kéo ảnh 7.png vào đây
-        public Sprite greenSprite;  // Kéo ảnh 8.png vào đây
-        public Sprite pinkSprite;   // Kéo ảnh 9.png vào đây
+        public Sprite purpleSprite; 
+        public Sprite blueSprite;   
+        public Sprite greenSprite;  
+        public Sprite pinkSprite;   
 
         // Hàm API nạp dữ liệu hình ảnh và số lượng mục tiêu tự động
         public void SetupGoal(BlockColor color, int targetCount)

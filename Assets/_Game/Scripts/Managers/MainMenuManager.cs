@@ -38,7 +38,7 @@ namespace JellyField.Managers
             }
 
 
-            //  ÉP XÁM TOÀN BỘ NÚT LEVEL KHI VỪA VÀO GAME (FIX TRÙNG MÀU)
+            // ÉP XÁM TOÀN BỘ NÚT LEVEL KHI VỪA VÀO GAME (FIX TRÙNG MÀU)
             // Sửa tận gốc bằng cách can thiệp vào Normal Color của hệ thống Button Tint
             foreach (var btn in levelButtons)
             {
