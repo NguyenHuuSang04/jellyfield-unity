@@ -4,11 +4,11 @@ using System.Collections.Generic;
 public class ClusterVisual : MonoBehaviour
 {
     [Header("Child Prefab")]
-    public GameObject jellyBlockPrefab; // Kéo file JellyBlock_Prefab vào đây
+    [SerializeField] private GameObject jellyBlockPrefab; // Kéo file JellyBlock_Prefab vào đây
 
     [Header("Tùy Chỉnh Khe Hở")]
     [Range(0f, 0.2f)] 
-    public float gapPercent = 0.0f; // Mặc định bằng 0 để các khối khít sát nhau
+    [SerializeField] private float gapPercent = 0.0f; // Mặc định bằng 0 để các khối khít sát nhau
 
     // Hàm tự động tính toán kích thước và vị trí thông minh lấp đầy 100% diện tích khay
     public void BuildCluster(ClusterData data)
@@ -17,7 +17,7 @@ public class ClusterVisual : MonoBehaviour
 
         // Bốc trực tiếp cellSize từ GridManager để làm gốc tính toán hình học
         GridManager manager = Object.FindFirstObjectByType<GridManager>();
-        float size = manager != null ? manager.cellSize : 1.4f;
+        float size = manager != null ? manager.CellSize : 1.4f;
 
         float maxSubBlockSize = size / 2f;
         float gap = size * gapPercent; 

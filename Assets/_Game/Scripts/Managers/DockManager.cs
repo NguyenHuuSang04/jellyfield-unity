@@ -8,23 +8,23 @@ public class DockManager : MonoBehaviour
     private int slotCount = 2;
 
     [Header("Dock Prefabs Config")]
-    public GameObject clusterVisualPrefab;
-    public GameObject dockSlotBackgroundPrefab;
+    [SerializeField] private GameObject clusterVisualPrefab;
+    [SerializeField] private GameObject dockSlotBackgroundPrefab;
 
     [Header("📐 Bộ Căn Chỉnh Vị Trí Dock (Inspector)")]
-    public float dockZPosition = -1.5f;
-    public float dockYHeight = 0.5f;
-    public float slotSpacing = 2.5f;
+    [SerializeField] private float dockZPosition = -1.5f;
+    [SerializeField] private float dockYHeight = 0.5f;
+    [SerializeField] private float slotSpacing = 2.5f;
 
     [Header("🎨 Tùy Chỉnh Ô Nền Tĩnh (37.jpg)")]
     [Tooltip("Độ lệch tầng Y của ô nền so với thạch. Nên để tầm -0.52f để đẩy ô nền nằm HẲN XUỐNG DƯỚI đáy khối thạch 3D.")]
-    public float slotBGYOffset = -0.52f;
+    [SerializeField] private float slotBGYOffset = -0.52f;
 
     [Tooltip("Tỉ lệ phóng theo chiều ngang (Trái - Phải) để vừa khít phom thạch")]
-    public float slotBGWidthMultiplier = 1.15f;
+    [SerializeField] private float slotBGWidthMultiplier = 1.15f;
 
     [Tooltip("Tỉ lệ phóng theo chiều dọc (Trên - Dưới) để vừa khít phom thạch")]
-    public float slotBGLengthMultiplier = 1.15f;
+    [SerializeField] private float slotBGLengthMultiplier = 1.15f;
 
     private List<GameObject> activeSpawnedClusters = new List<GameObject>();
     private List<GameObject> spawnedSlotBackgrounds = new List<GameObject>();
@@ -72,7 +72,7 @@ public class DockManager : MonoBehaviour
                 float spriteRealWidth = sr.sprite.bounds.size.x;
                 if (spriteRealWidth > 0)
                 {
-                    float baseScale = gridManager.cellSize / spriteRealWidth;
+                    float baseScale = gridManager.CellSize / spriteRealWidth;
 
                     // ĐÃ NÂNG CẤP: Tách biệt hoàn toàn tỉ lệ phóng theo 2 chiều Ngang - Dọc theo ý Sang
                     float finalScaleX = baseScale * slotBGWidthMultiplier;
@@ -132,7 +132,7 @@ public class DockManager : MonoBehaviour
     {
         if (AudioManager.Instance != null)
         {
-            AudioManager.Instance.PlaySound(AudioManager.Instance.popSound);
+            AudioManager.Instance.PlaySound(AudioManager.Instance.PopSound);
         }
         if (slotIndex >= 0 && slotIndex < activeSpawnedClusters.Count)
         {

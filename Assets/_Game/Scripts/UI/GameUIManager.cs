@@ -8,35 +8,35 @@ using UnityEngine.SceneManagement;
 public class GameUIManager : MonoBehaviour
 {
     [Header("🏢 Bộ Khung Panels Hệ Thống")]
-    public GameObject mainMenuPanel;
-    public GameObject gameplayHUDPanel;
-    public GameObject resultPopupPanel;
+    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject gameplayHUDPanel;
+    [SerializeField] private GameObject resultPopupPanel;
 
     [Header("🎯 Bảng Thông Báo Win/Lose Mới")]
-    public GameObject winPanel;
-    public GameObject losePanel;
+    [SerializeField] private GameObject winPanel;
+    [SerializeField] private GameObject losePanel;
 
     [Header("📦 Khai Báo Khay Chứa Goal")]
-    public Transform goalContainerParent;
-    public Transform winGoalContainer;
-    public Transform loseGoalContainer;
+    [SerializeField] private Transform goalContainerParent;
+    [SerializeField] private Transform winGoalContainer;
+    [SerializeField] private Transform loseGoalContainer;
 
     [Header("🎨 Prefabs Hiển Thị")]
-    public GameObject goalItemPrefab;
-    public GameObject goalUiPrefab;
+    [SerializeField] private GameObject goalItemPrefab;
+    [SerializeField] private GameObject goalUiPrefab;
 
     [Header("🔢 Dynamic HUD Text Elements")]
-    public TextMeshProUGUI levelTitleText;
-    public TextMeshProUGUI resultStatusText;
+    [SerializeField] private TextMeshProUGUI levelTitleText;
+    [SerializeField] private TextMeshProUGUI resultStatusText;
 
     [Header("🎛️ Bộ Nút Bấm Điều Hướng Popups")]
-    public Button btnHomeWin;
-    public Button btnNextLevel;
-    public Button btnHomeLose;
-    public Button btnRetry;
+    [SerializeField] private Button btnHomeWin;
+    [SerializeField] private Button btnNextLevel;
+    [SerializeField] private Button btnHomeLose;
+    [SerializeField] private Button btnRetry;
 
     [Header("🔄 Nút Chơi Lại Đặc Biệt Trên WinPanel (Màn Cuối)")]
-    public Button btnRetryWin;
+    [SerializeField] private Button btnRetryWin;
 
     private List<GameObject> spawnedGoalItems = new List<GameObject>();
     private Dictionary<BlockColor, GoalItemUI> activeGoalUIs = new Dictionary<BlockColor, GoalItemUI>();
@@ -119,9 +119,9 @@ public class GameUIManager : MonoBehaviour
         bool isLastLevel = false;
         if (gridManager == null) gridManager = Object.FindFirstObjectByType<GridManager>();
 
-        if (gridManager != null && gridManager.currentLevelData != null)
+        if (gridManager != null && gridManager.CurrentLevelData != null)
         {
-            if (gridManager.currentLevelData.LevelIndex >= 3)
+            if (gridManager.CurrentLevelData.LevelIndex >= 3)
             {
                 isLastLevel = true;
             }
@@ -138,7 +138,7 @@ public class GameUIManager : MonoBehaviour
             if (btnRetryWin != null) btnRetryWin.gameObject.SetActive(false);
         }
 
-        if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.winSound);
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.WinSound);
         if (gridManager != null) gridManager.ClearActiveBoard();
     }
 
@@ -156,16 +156,16 @@ public class GameUIManager : MonoBehaviour
         }
         PopulatePanelGoals(loseGoalContainer, false);
 
-        if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.loseSound);
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.LoseSound);
         if (gridManager != null) gridManager.ClearActiveBoard();
     }
 
     private void GenerateLevelUI()
     {
         if (gridManager == null) gridManager = Object.FindFirstObjectByType<GridManager>();
-        if (gridManager == null || gridManager.currentLevelData == null) return;
+        if (gridManager == null || gridManager.CurrentLevelData == null) return;
 
-        LevelData currentLevel = gridManager.currentLevelData;
+        LevelData currentLevel = gridManager.CurrentLevelData;
 
         if (levelTitleText != null) levelTitleText.text = $"LEVEL {currentLevel.LevelIndex}";
 
@@ -217,12 +217,12 @@ public class GameUIManager : MonoBehaviour
 
         foreach (Transform child in container) Destroy(child.gameObject);
 
-        if (gridManager == null || gridManager.currentLevelData == null) return;
+        if (gridManager == null || gridManager.CurrentLevelData == null) return;
 
         GameObject prefabToUse = goalUiPrefab != null ? goalUiPrefab : goalItemPrefab;
         if (prefabToUse == null) return;
 
-        foreach (var goal in gridManager.currentLevelData.Goals)
+        foreach (var goal in gridManager.CurrentLevelData.Goals)
         {
             GameObject goalItem = Instantiate(prefabToUse, container);
 
@@ -238,15 +238,15 @@ public class GameUIManager : MonoBehaviour
     private void LoadNextLevel()
     {
         if (gridManager == null) gridManager = Object.FindFirstObjectByType<GridManager>();
-        if (gridManager == null || gridManager.allLevels == null || gridManager.allLevels.Count == 0) return;
+        if (gridManager == null || gridManager.AllLevels == null || gridManager.AllLevels.Count == 0) return;
 
-        int currentIndex = gridManager.allLevels.IndexOf(gridManager.currentLevelData);
+        int currentIndex = gridManager.AllLevels.IndexOf(gridManager.CurrentLevelData);
 
-        if (currentIndex != -1 && currentIndex < gridManager.allLevels.Count - 1)
+        if (currentIndex != -1 && currentIndex < gridManager.AllLevels.Count - 1)
         {
             Debug.Log($"[GameUIManager]: Bấm NEXT LEVEL -> Tiến tới màn chơi tiếp theo: LEVEL {currentIndex + 2}");
 
-            MainMenuManager.ChosenLevelData = gridManager.allLevels[currentIndex + 1];
+            MainMenuManager.ChosenLevelData = gridManager.AllLevels[currentIndex + 1];
 
             UnityEngine.SceneManagement.SceneManager.LoadScene("GameplayScene");
         }

@@ -55,9 +55,9 @@ public class GameManager : MonoBehaviour
         runtimeGoals.Clear();
         GridManager grid = Object.FindFirstObjectByType<GridManager>();
         
-        if (grid != null && grid.currentLevelData != null)
+        if (grid != null && grid.CurrentLevelData != null)
         {
-            foreach (var goal in grid.currentLevelData.Goals)
+            foreach (var goal in grid.CurrentLevelData.Goals)
             {
                 if (goal.Color != BlockColor.None)
                 {

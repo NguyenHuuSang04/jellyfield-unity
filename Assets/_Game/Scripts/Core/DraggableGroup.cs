@@ -74,7 +74,7 @@ public class DraggableGroup : MonoBehaviour
         // XỬ LÝ SNAP VÀ INJECT DỮ LIỆU VÀO LƯỚI NGẦM
         if (TrySnapAndInjectData())
         {
-            if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.dropSound);
+            if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.DropSound);
 
             JellyJuiceFX.PlayDropBounce(this.transform);
 

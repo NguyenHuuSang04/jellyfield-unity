@@ -9,20 +9,32 @@ public class GridManager : MonoBehaviour
     public Dictionary<Vector2Int, GridCell> Cells { get; private set; } = new Dictionary<Vector2Int, GridCell>();
 
     [Header("Grid Config")]
-    public float cellSize = 1.4f;
-    public GameObject gridCellPrefab;
-    public GameObject jellyBlockPrefab;
+    [SerializeField] private float cellSize = 1.4f;
+    [SerializeField] private GameObject gridCellPrefab;
+    [SerializeField] private GameObject jellyBlockPrefab;
 
-    public float dropDelayBeforePop = 0.4f;
+    [SerializeField] private float dropDelayBeforePop = 0.4f;
 
     [Range(0f, 0.2f)]
-    public float cellGapPercent = 0.0f;
+    [SerializeField] private float cellGapPercent = 0.0f;
 
     [Header("Level Asset")]
-    public LevelData currentLevelData;
+    [SerializeField] private LevelData currentLevelData;
 
     [Header("🎯 Toàn Bộ Các Màn Chơi Hệ Thống")]
-    public List<LevelData> allLevels = new List<LevelData>();
+    [SerializeField] private List<LevelData> allLevels = new List<LevelData>();
+
+    public float CellSize => cellSize;
+    public GameObject GridCellPrefab => gridCellPrefab;
+    public GameObject JellyBlockPrefab => jellyBlockPrefab;
+    public float DropDelayBeforePop => dropDelayBeforePop;
+    public float CellGapPercent => cellGapPercent;
+    public LevelData CurrentLevelData
+    {
+        get => currentLevelData;
+        set => currentLevelData = value;
+    }
+    public List<LevelData> AllLevels => allLevels;
 
     public IEnumerable<GridCell> ActiveCells => Cells.Values;
     private GridResolver gridResolver;

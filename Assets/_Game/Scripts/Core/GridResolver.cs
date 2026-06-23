@@ -19,9 +19,9 @@ public class GridResolver : MonoBehaviour
 
     private IEnumerator ResolutionRoutine()
     {
-        if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.popSound);
+        if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.PopSound);
 
-        yield return new WaitForSeconds(gridManager.dropDelayBeforePop);
+        yield return new WaitForSeconds(gridManager.DropDelayBeforePop);
 
         int comboCount = 0;
         bool hasChanges = true;
@@ -49,7 +49,7 @@ public class GridResolver : MonoBehaviour
             var matchGroups = MatchResolver.ResolveInterCellMatch(gridManager);
             if (matchGroups.Count > 0)
             {
-                if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.matchSound);
+                if (AudioManager.Instance != null) AudioManager.Instance.PlaySound(AudioManager.Instance.MatchSound);
 
                 comboCount++;
                 matchGroups.Sort((a, b) => CalculateCascadePotential(b).CompareTo(CalculateCascadePotential(a)));

@@ -6,14 +6,14 @@ using UnityEditor;
 public class LevelEditorBackend : MonoBehaviour
 {
     [Header("Design Target")]
-    public LevelData targetLevelData; 
+    [SerializeField] private LevelData targetLevelData; 
 
     [Header("Design Matrix Size")]
-    public int previewWidth = 5;
-    public int previewHeight = 5;
+    [SerializeField] private int previewWidth = 5;
+    [SerializeField] private int previewHeight = 5;
 
     // ĐỔI SANG VECTOR3: Để lưu trữ chính xác vị trí float thực tế ngoài Scene
-    [HideInInspector] public List<Vector3> editorActiveCells = new List<Vector3>();
+    [HideInInspector] [SerializeField] private List<Vector3> editorActiveCells = new List<Vector3>();
 
     public void SpawnEditorWorkspace()
     {
@@ -23,8 +23,8 @@ public class LevelEditorBackend : MonoBehaviour
         }
 
         GridManager manager = GetComponent<GridManager>();
-        float size = manager != null ? manager.cellSize : 1.4f;
-        GameObject cellPrefab = manager != null ? manager.gridCellPrefab : null;
+        float size = manager != null ? manager.CellSize : 1.4f;
+        GameObject cellPrefab = manager != null ? manager.GridCellPrefab : null;
 
         if (cellPrefab == null) return;
 
