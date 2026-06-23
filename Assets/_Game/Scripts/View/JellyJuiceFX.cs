@@ -1,5 +1,5 @@
 using UnityEngine;
-using DG.Tweening; // Khai báo thư viện DOTween
+using DG.Tweening; 
 
 public static class JellyJuiceFX
 {

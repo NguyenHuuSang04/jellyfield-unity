@@ -24,9 +24,7 @@ public class ClusterVisual : MonoBehaviour
 
         int count = data.Blocks.Count;
 
-        // ===================================================================
         // CẤU HÌNH COLLIDER DÀY DẶN: Giúp thao tác chạm bốc thạch siêu nhạy
-        // ===================================================================
         BoxCollider parentCollider = GetComponent<BoxCollider>();
         if (parentCollider != null)
         {
@@ -34,9 +32,8 @@ public class ClusterVisual : MonoBehaviour
             parentCollider.size = new Vector3(size, 0.5f, size);
         }
 
-        // ===================================================================
+
         // TRƯỜNG HỢP 1: CÓ 1 KHỐI MÀU -> CHIẾM 100% DIỆN TÍCH KHAY
-        // ===================================================================
         if (count == 1)
         {
             var blockData = data.Blocks[0];
@@ -56,9 +53,8 @@ public class ClusterVisual : MonoBehaviour
                 blockView.SetColorView(blockData.Color);
             }
         }
-        // ===================================================================
-        // TRƯỜNG HỢP 2: CÓ 2 KHỐI MÀU -> MỖI KHỐI CHIẾM CHÍNH XÁC 50% DIỆN TÍCH
-        // ===================================================================
+
+        // TRƯỜNG HỢP 2: CÓ 2 KHỐI MÀU -> MỖI KHỐI CHIẾM CHÍNH XÁC 50% DIỆN TÍCH 
         else if (count == 2)
         {
             var b0 = data.Blocks[0];
@@ -116,9 +112,8 @@ public class ClusterVisual : MonoBehaviour
                 }
             }
         }
-        // ===================================================================
+
         // TRƯỜNG HỢP 3: CÓ 3 KHỐI MÀU -> 2 KHỐI 25%, 1 KHỐI TO CHIẾM 50%
-        // ===================================================================
         else if (count == 3)
         {
             bool[,] occupied = new bool[2, 2];
@@ -175,9 +170,8 @@ public class ClusterVisual : MonoBehaviour
                 }
             }
         }
-        // ===================================================================
+
         // TRƯỜNG HỢP 4: CÓ 4 KHỐI MÀU -> CHIA ĐỀU MỖI KHỐI CHIẾM ĐÚNG 25% DIỆN TÍCH
-        // ===================================================================
         else if (count == 4)
         {
             foreach (var blockData in data.Blocks)

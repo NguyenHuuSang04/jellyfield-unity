@@ -65,7 +65,7 @@ public class LevelEditorBackend : MonoBehaviour
         EditorUtility.SetDirty(targetLevelData);
         AssetDatabase.SaveAssets();
 
-        Debug.Log($"🎉 [Level Editor]: Đã lưu thành công {editorActiveCells.Count} ô lưới với tọa độ thực tế vào file {targetLevelData.name}!");
+        Debug.Log($" [Level Editor]: Đã lưu thành công {editorActiveCells.Count} ô lưới với tọa độ thực tế vào file {targetLevelData.name}!");
     }
 }
 #endif

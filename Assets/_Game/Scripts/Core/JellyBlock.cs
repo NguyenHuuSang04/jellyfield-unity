@@ -7,10 +7,6 @@ public class JellyBlock
     public BlockColor Color;
     public HashSet<Vector2Int> LocalSlots = new HashSet<Vector2Int>();
 
-    // ===================================================================
-    // BIẾN THIẾU CHÍNH LÀ ĐÂY: 
-    // Khai báo danh sách lưu trữ các khối Cube hiển thị 3D ngoài màn hình
-    // ===================================================================
     public List<GameObject> VisualObjs = new List<GameObject>();
 
     public JellyBlock(int id, BlockColor color, IEnumerable<Vector2Int> slots)
